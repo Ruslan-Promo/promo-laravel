@@ -9,3 +9,9 @@ git clone https://github.com/Ruslan-Promo/promo-laravel .
 ```bash
 ./vendor/bin/sail up
 ```
+
+- Сайт будет доступен по ссылке http://localhost
+
+## Процесс создания переменных окружения и установке зависимостей
+
+При запуске команды `./vendor/bin/sail up` генерируются переменные окружения (.env) и загружаются/подключаются зависимости из composer.json
