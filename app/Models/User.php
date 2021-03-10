@@ -9,6 +9,15 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
+    const DEFAULT_TYPE = 0;
+    const ADMIN_TYPE = 1;
+    const AGENT_TYPE = 2;
+
+    const STATUS_DELETED = 0;
+    const STATUS_INACTIVE = 5;
+    const STATUS_ACTIVE = 10;
+
     use HasFactory, Notifiable;
 
     /**
@@ -17,9 +26,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'surname',
         'name',
+        'patronymic',
+        'phone',
         'email',
+        'gender',
         'password',
+        'verify_token',
+        'status',
     ];
 
     /**
@@ -40,4 +55,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    # Relationships
+    public function admin()
+    {
+        return $this->hasOne(Admin::class, 'user_id', 'id');
+    }
+
+    public function agent()
+    {
+        return $this->hasOne(Agent::class, 'user_id', 'id');
+    }
+
+    public function isAdmin(){
+        return $this->role === self::ADMIN_TYPE;
+    }
+
+    public function isAgent(){
+        return $this->role === self::AGENT_TYPE;
+    }
 }
