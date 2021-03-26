@@ -10,6 +10,18 @@ class Order extends Model
     use HasFactory;
 
     /**
+     * The attributes to be converted to base types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'date_registration' => 'datetime',
+        'date_start' => 'datetime',
+        'date_end' => 'datetime',
+        'date_payment' => 'datetime',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

@@ -22,12 +22,12 @@ class CreateUsersTable extends Migration
 			$table->string('patronymic')->nullable(); /* отчество */
             $table->string('phone')->nullable();
             $table->string('email')->unique();
-            $table->bigInteger('role')->default(0); /* роль (справочник) */
+            $table->string('role')->default(User::ROLE_DEFAULT); /* роль (справочник) */
             $table->string('gender')->nullable(); /* пол */
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->smallInteger('status')->default(User::STATUS_INACTIVE);
+            $table->string('status')->default(User::STATUS_INACTIVE);
             $table->string('verify_token')->nullable()->unique();
             $table->timestamps();
         });

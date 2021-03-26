@@ -10,13 +10,13 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
 
-    const DEFAULT_TYPE = 0;
-    const ADMIN_TYPE = 1;
-    const AGENT_TYPE = 2;
+    const ROLE_DEFAULT = 'user';
+    const ROLE_ADMIN = 'admin';
+    const ROLE_AGENT = 'agent';
 
-    const STATUS_DELETED = 0;
-    const STATUS_INACTIVE = 5;
-    const STATUS_ACTIVE = 10;
+    const STATUS_DELETED = 'deleted';
+    const STATUS_INACTIVE = 'inactive';
+    const STATUS_ACTIVE = 'active';
 
     use HasFactory, Notifiable;
 
@@ -35,6 +35,7 @@ class User extends Authenticatable
         'password',
         'verify_token',
         'status',
+        'role',
     ];
 
     /**
@@ -68,10 +69,10 @@ class User extends Authenticatable
     }
 
     public function isAdmin(){
-        return $this->role === self::ADMIN_TYPE;
+        return $this->role === self::ROLE_ADMIN;
     }
 
     public function isAgent(){
-        return $this->role === self::AGENT_TYPE;
+        return $this->role === self::ROLE_AGENT;
     }
 }
