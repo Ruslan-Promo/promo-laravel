@@ -5,4 +5,7 @@ return [
     'English' => 'English',
     'Register' => 'Register',
     'Login' => 'Login',
+
+    'Submit' => 'Submit',
+    'Back' => 'Back',
 ];

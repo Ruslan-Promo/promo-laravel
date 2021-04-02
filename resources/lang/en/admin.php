@@ -9,4 +9,6 @@ return [
 
     'Products' => 'Products',
     'AddProduct' => 'Add product',
+    'ProductName' => 'Product Name',
+    'ProductPriceYear' => 'Product Price Year',
 ];

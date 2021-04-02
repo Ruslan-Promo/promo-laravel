@@ -9,6 +9,12 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'price_year' => 'float',
+        'price_six_month' => 'float',
+        'price_one_month' => 'float',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

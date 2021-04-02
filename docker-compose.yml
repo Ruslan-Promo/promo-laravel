@@ -49,7 +49,7 @@ services:
     myadmin:
         image: 'phpmyadmin:latest'
         ports:
-          - 8080:80
+          - 8888:80
         environment:
           MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
         links:

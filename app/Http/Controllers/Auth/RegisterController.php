@@ -74,10 +74,10 @@ class RegisterController extends Controller
         $user = User::create([
             'surname' => $data['surname'],
             'name' => $data['name'],
-            'patronymic' => $data['patronymic'],
-            'phone' => $data['phone'],
+            'patronymic' => isset($data['patronymic']) ? $data['patronymic'] : '',
+            'phone' => isset($data['phone']) ? $data['phone'] : '',
             'email' => $data['email'],
-            'role' => User::DEFAULT_TYPE,
+            'role' => User::ROLE_DEFAULT,
             'password' => Hash::make($data['password']),
             'verify_token' => Str::random(),
             'status' => User::STATUS_INACTIVE,

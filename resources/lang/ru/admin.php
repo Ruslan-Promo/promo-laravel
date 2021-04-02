@@ -9,5 +9,6 @@ return [
 
     'Products' => 'Товары',
     'AddProduct' => 'Добавить товар',
-
+    'ProductName' => 'Название товара',
+    'ProductPriceYear' => 'Цена за год',
 ];

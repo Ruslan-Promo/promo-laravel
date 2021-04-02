@@ -58,21 +58,24 @@ class User extends Authenticatable
     ];
 
     # Relationships
-    public function admin()
-    {
-        return $this->hasOne(Admin::class, 'user_id', 'id');
-    }
-
     public function agent()
     {
         return $this->hasOne(Agent::class, 'user_id', 'id');
     }
 
     public function isAdmin(){
-        return $this->role === self::ROLE_ADMIN;
+        return $this->hasRole(self::ROLE_ADMIN);
     }
 
     public function isAgent(){
-        return $this->role === self::ROLE_AGENT;
+        return $this->hasRole(self::ROLE_AGENT);
+    }
+
+    public function hasRole($role)
+    {
+      if ($this->where('role', $role)->first()){
+        return true;
+      }
+      return false;
     }
 }
