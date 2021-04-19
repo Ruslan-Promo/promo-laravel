@@ -17,8 +17,7 @@ class AgentRequest extends Model
     protected $fillable = [
         'name',
         'description',
-        'logo',
-        'images',
+        'logo_id',
         'worktime',
         'address',
         'inn',
@@ -30,4 +29,24 @@ class AgentRequest extends Model
         'products',
         'email',
     ];
+
+    /**
+     * Logo company
+     *
+     * @var object
+     */
+    public function logo()
+    {
+        return $this->belongsTo(Media::class, 'logo_id', 'id')->withDefault();
+    }
+
+    /**
+     * Images company
+     *
+     * @var object
+     */
+    public function images()
+    {
+        return $this->belongsToMany(Media::class, 'agent_requests_media', 'requests_id', 'media_id');
+    }
 }

@@ -17,7 +17,6 @@ class Company extends Model
     protected $fillable = [
         'name',
         'description',
-        'images',
         'worktime',
         'address',
         'inn',
@@ -27,4 +26,14 @@ class Company extends Model
         'shortname',
         'license',
     ];
+
+    /**
+     * Images
+     *
+     * @var object
+     */
+    public function images()
+    {
+        return $this->belongsToMany(Media::class, 'companies_media', 'company_id', 'media_id');
+    }
 }

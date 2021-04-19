@@ -15,11 +15,19 @@ class Agent extends Migration
     {
         Schema::create('agents', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
-            $table->bigInteger('company_id')->default(0);
-            $table->string('specialty')->nullable(); /* Должность */
-            $table->string('photo')->nullable(); /* Фото */
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('company_id')->default(0)->comment('Компания');
+            $table->string('specialty')->nullable()->comment('Должность');
+            $table->unsignedBigInteger('photo_id')->default(0)->comment('Фото');
             $table->timestamps();
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained();
+        });
+
+        Schema::table('media', function (Blueprint $table) {
+            $table->foreignId('photo_id')->constrained();
         });
     }
 

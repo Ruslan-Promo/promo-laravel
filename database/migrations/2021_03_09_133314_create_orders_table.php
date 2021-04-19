@@ -15,15 +15,27 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('customer_id'); /* Покупатель */
-            $table->bigInteger('agent_id'); /* Агент */
-            $table->bigInteger('request_id'); /* Заявка на продукт */
-            $table->float('total'); /* стоимость */
-            $table->timestamp('date_registration')->nullable(); /* дата оформления */
-            $table->timestamp('date_start')->nullable(); /* дата начала действия */
-            $table->timestamp('date_end')->nullable(); /* дата окончания действия */
-            $table->timestamp('date_payment')->nullable(); /* дата оплаты */
+            $table->unsignedBigInteger('customer_id')->comment('Покупатель');
+            $table->unsignedBigInteger('agent_id')->comment('Агент');
+            $table->unsignedBigInteger('request_id')->comment('Заявка на продукт');
+            $table->float('total')->default(0)->comment('Стоимость');
+            $table->timestamp('date_registration')->nullable()->comment('Дата оформления');
+            $table->timestamp('date_start')->nullable()->comment('Дата начала действия');
+            $table->timestamp('date_end')->nullable()->comment('Дата окончания действия');
+            $table->timestamp('date_payment')->nullable()->comment('Дата оплаты');
             $table->timestamps();
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('customer_id')->constrained();
+        });
+
+        Schema::table('agents', function (Blueprint $table) {
+            $table->foreignId('agent_id')->constrained();
+        });
+
+        Schema::table('product_requests', function (Blueprint $table) {
+            $table->foreignId('request_id')->constrained();
         });
     }
 

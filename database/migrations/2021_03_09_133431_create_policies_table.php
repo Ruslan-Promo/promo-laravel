@@ -15,15 +15,27 @@ class CreatePoliciesTable extends Migration
     {
         Schema::create('policies', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('agent_id'); /* кто выдал */
-            $table->bigInteger('company_id')->default(0); /* Компания */
-            $table->float('price')->nullable(); /* стоимость */
-            $table->bigInteger('product_id'); /* страховой продукт */
-            $table->float('total')->nullable(); /* Сумма страховки */
-            $table->timestamp('date_start')->nullable(); /* дата начала действия */
-            $table->timestamp('date_end')->nullable(); /* дата окончания действия */
-            $table->text('description')->nullable(); /* Описание объекта страхования */
+            $table->unsignedBigInteger('agent_id')->comment('кто выдал');
+            $table->unsignedBigInteger('company_id')->default(0)->comment('Компания');
+            $table->float('price')->nullable()->comment('стоимость');
+            $table->unsignedBigInteger('product_id')->comment('страховой продукт');
+            $table->float('total')->nullable()->comment('Сумма страховки');
+            $table->timestamp('date_start')->nullable()->comment('дата начала действия');
+            $table->timestamp('date_end')->nullable()->comment('дата окончания действия');
+            $table->text('description')->nullable()->comment('Описание объекта страхования');
             $table->timestamps();
+        });
+
+        Schema::table('agents', function (Blueprint $table) {
+            $table->foreignId('agent_id')->constrained();
+        });
+
+        Schema::table('companies', function (Blueprint $table) {
+            $table->foreignId('company_id')->constrained();
+        });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreignId('product_id')->constrained();
         });
     }
 

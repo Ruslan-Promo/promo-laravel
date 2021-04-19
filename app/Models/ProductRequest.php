@@ -18,4 +18,24 @@ class ProductRequest extends Model
         'user_id',
         'date_created',
     ];
+
+    /**
+     * User
+     *
+     * @var object
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * Product
+     *
+     * @var object
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
 }

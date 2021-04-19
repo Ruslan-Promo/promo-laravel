@@ -57,20 +57,39 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    # Relationships
+    /**
+     * Agent
+     *
+     * @var object
+     */
     public function agent()
     {
         return $this->hasOne(Agent::class, 'user_id', 'id');
     }
 
+    /**
+     * Check is Admin
+     *
+     * @var boolean
+     */
     public function isAdmin(){
         return $this->hasRole(self::ROLE_ADMIN);
     }
 
+    /**
+     * Check is Agent
+     *
+     * @var boolean
+     */
     public function isAgent(){
         return $this->hasRole(self::ROLE_AGENT);
     }
 
+    /**
+     * Check has role
+     *
+     * @var boolean
+     */
     public function hasRole($role)
     {
       if ($this->where('role', $role)->first()){

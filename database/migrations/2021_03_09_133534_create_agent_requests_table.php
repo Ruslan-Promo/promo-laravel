@@ -15,21 +15,24 @@ class CreateAgentRequestsTable extends Migration
     {
         Schema::create('agent_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); /* название */
-            $table->text('description')->nullable(); /* Описание */
-            $table->string('logo')->nullable(); /* логотип */
-            $table->text('images')->nullable(); /* изображения */
-            $table->string('worktime')->nullable(); /* Время работы */
-            $table->string('address')->nullable(); /* Адреса офисов */
-            $table->string('inn')->nullable(); /* ИНН */
-            $table->string('ogrn')->nullable(); /* ОГРН */
-            $table->string('kpp')->nullable(); /* КПП */
-            $table->string('fullname')->nullable(); /* полное наименование */
-            $table->string('shortname')->nullable(); /* короткое наименование */
-            $table->string('license')->nullable(); /* лицензия */
-            $table->text('products')->nullable(); /* Продукты */
+            $table->string('name')->comment('название');
+            $table->text('description')->nullable()->comment('Описание');
+            $table->unsignedBigInteger('logo_id')->nullable()->comment('логотип');
+            $table->string('worktime')->nullable()->comment('Время работы');
+            $table->string('address')->nullable()->comment('Адреса офисов');
+            $table->string('inn')->nullable()->comment('ИНН');
+            $table->string('ogrn')->nullable()->comment('ОГРН');
+            $table->string('kpp')->nullable()->comment('КПП');
+            $table->string('fullname')->nullable()->comment('полное наименование');
+            $table->string('shortname')->nullable()->comment('короткое наименование');
+            $table->string('license')->nullable()->comment('лицензия');
+            $table->text('products')->nullable()->comment('Продукты');
             $table->string('email')->unique();
             $table->timestamps();
+        });
+
+        Schema::table('media', function (Blueprint $table) {
+            $table->foreignId('logo_id')->constrained();
         });
     }
 

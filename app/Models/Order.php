@@ -36,4 +36,34 @@ class Order extends Model
         'date_end',
         'date_payment',
     ];
+
+    /**
+     * Customer
+     *
+     * @var object
+     */
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_id', 'id');
+    }
+
+    /**
+     * Agent
+     *
+     * @var object
+     */
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class, 'agent_id', 'id');
+    }
+
+    /**
+     * Request
+     *
+     * @var object
+     */
+    public function request()
+    {
+        return $this->belongsTo(ProductRequest::class, 'request_id', 'id');
+    }
 }

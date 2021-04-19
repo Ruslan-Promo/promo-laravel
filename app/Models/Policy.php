@@ -24,4 +24,34 @@ class Policy extends Model
         'date_end',
         'description',
     ];
+
+    /**
+     * Agent
+     *
+     * @var object
+     */
+    public function agent()
+    {
+        return $this->belongsTo(Agent::class, 'agent_id', 'id');
+    }
+
+    /**
+     * Company
+     *
+     * @var object
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id')->withDefault();
+    }
+
+    /**
+     * Product
+     *
+     * @var object
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
 }

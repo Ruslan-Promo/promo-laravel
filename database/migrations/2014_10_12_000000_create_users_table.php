@@ -17,17 +17,17 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-			$table->string('surname'); /* фамилия */
-            $table->string('name'); /* имя */
-			$table->string('patronymic')->nullable(); /* отчество */
+			$table->string('surname')->comment('Фамилия');
+            $table->string('name')->comment('Имя');
+			$table->string('patronymic')->nullable()->comment('Отчество');
             $table->string('phone')->nullable();
             $table->string('email')->unique();
-            $table->string('role')->default(User::ROLE_DEFAULT); /* роль (справочник) */
-            $table->string('gender')->nullable(); /* пол */
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('role')->default(User::ROLE_DEFAULT)->comment('Роль');
+            $table->string('gender')->nullable()->comment('Пол');
+            $table->timestamp('email_verified_at')->nullable()->comment('Дата верификации');
             $table->string('password');
             $table->rememberToken();
-            $table->string('status')->default(User::STATUS_INACTIVE);
+            $table->string('status')->default(User::STATUS_INACTIVE)->comment('Статус пользователя');
             $table->string('verify_token')->nullable()->unique();
             $table->timestamps();
         });
