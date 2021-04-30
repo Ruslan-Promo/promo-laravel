@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +15,50 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/welcome', function () {
-    return view('welcome');
-});
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
+})->name('home')->middleware('setlocale');
+
+Auth::routes();
+
+Route::get('/verify/{token}', ['as' => 'register.verify', 'uses' => 'App\Http\Controllers\Auth\RegisterController@verify']);
+
+
+Route::get('/admin', 'App\Http\Controllers\HomeController@index')
+    ->name('admin')
+    ->middleware('is_admin', 'setlocale');
+
+Route::group(['middleware' => ['auth', 'is_admin', 'setlocale']], function () {
+		Route::get('icons', ['as' => 'pages.icons', 'uses' => 'App\Http\Controllers\PageController@icons']);
+		Route::get('maps', ['as' => 'pages.maps', 'uses' => 'App\Http\Controllers\PageController@maps']);
+		Route::get('notifications', ['as' => 'pages.notifications', 'uses' => 'App\Http\Controllers\PageController@notifications']);
+		Route::get('rtl', ['as' => 'pages.rtl', 'uses' => 'App\Http\Controllers\PageController@rtl']);
+		Route::get('tables', ['as' => 'pages.tables', 'uses' => 'App\Http\Controllers\PageController@tables']);
+		Route::get('typography', ['as' => 'pages.typography', 'uses' => 'App\Http\Controllers\PageController@typography']);
+		Route::get('upgrade', ['as' => 'pages.upgrade', 'uses' => 'App\Http\Controllers\PageController@upgrade']);
 });
+
+Route::group(['middleware' => ['auth', 'is_admin', 'setlocale']], function () {
+	Route::resource('admin/users', 'App\Http\Controllers\UserController', ['except' => ['show']]);
+	Route::get('admin/profile', ['as' => 'profile.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
+	Route::put('admin/profile', ['as' => 'profile.update', 'uses' => 'App\Http\Controllers\ProfileController@update']);
+	Route::put('admin/profile/password', ['as' => 'profile.password', 'uses' => 'App\Http\Controllers\ProfileController@password']);
+});
+
+Route::group(['middleware' => ['auth', 'is_admin', 'setlocale']], function () {
+    Route::resource('admin/products', 'App\Http\Controllers\ProductController');
+	Route::get('admin/products', ['as' => 'products.index', 'uses' => 'App\Http\Controllers\ProductController@index']);
+	Route::put('admin/products/create', ['as' => 'products.create', 'uses' => 'App\Http\Controllers\ProfileController@store']);
+    Route::get('admin/products/{product_id}/edit', ['as' => 'products.edit', 'uses' => 'App\Http\Controllers\ProfileController@edit']);
+});
+
+/* Localization */
+Route::get('setlocale/{locale}',function($locale){
+    if (! in_array($locale, ['en', 'ru'])) {
+        $locale = App::getLocale();
+    }
+    App::setLocale($locale);
+    session(['locale' => $locale]);
+    return redirect()->back();
+});
+
