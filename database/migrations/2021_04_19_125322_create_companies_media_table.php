@@ -15,16 +15,9 @@ class CreateCompaniesMediaTable extends Migration
     {
         Schema::create('companies_media', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('media_id')->comment('Медиа');
-            $table->unsignedBigInteger('company_id')->comment('Компания');
+            $table->foreignId('media_id')->comment('Медиа')->constrained('media')->onDelete('cascade');
+            $table->foreignId('company_id')->comment('Компания')->constrained('companies')->onDelete('cascade');
             $table->timestamps();
-        });
-        Schema::table('media', function (Blueprint $table) {
-            $table->foreignId('media_id')->constrained();
-        });
-
-        Schema::table('companies', function (Blueprint $table) {
-            $table->foreignId('company_id')->constrained();
         });
     }
 

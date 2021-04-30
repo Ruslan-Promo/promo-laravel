@@ -15,18 +15,10 @@ class CreateProductRequestsTable extends Migration
     {
         Schema::create('product_requests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id')->comment('Продукт');
-            $table->unsignedBigInteger('user_id')->comment('Пользователь');
+            $table->foreignId('product_id')->comment('Продукт')->constrained('products')->onDelete('cascade');
+            $table->foreignId('user_id')->comment('Пользователь')->constrained('users')->onDelete('cascade');
             $table->timestamp('date_created');
             $table->timestamps();
-        });
-
-        Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('product_id')->constrained();
-        });
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained();
         });
     }
 

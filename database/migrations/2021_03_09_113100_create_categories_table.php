@@ -17,7 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('name')->comment('Название');
             $table->text('description')->nullable()->comment('Описание');
-            $table->unsignedBigInteger('parent_id')->default(0)->comment('Род.категория');
+            $table->unsignedBigInteger('parent_id')->nullable()->comment('Род.категория');
             $table->integer('order')->default(100)->comment('Сортировка');
             $table->string('slug')->comment('Слаг');
             $table->timestamps();

@@ -17,7 +17,7 @@ class CreateAgentRequestsTable extends Migration
             $table->id();
             $table->string('name')->comment('название');
             $table->text('description')->nullable()->comment('Описание');
-            $table->unsignedBigInteger('logo_id')->nullable()->comment('логотип');
+            $table->foreignId('logo_id')->nullable()->comment('логотип')->constrained('media')->onDelete('set null');
             $table->string('worktime')->nullable()->comment('Время работы');
             $table->string('address')->nullable()->comment('Адреса офисов');
             $table->string('inn')->nullable()->comment('ИНН');
@@ -29,10 +29,6 @@ class CreateAgentRequestsTable extends Migration
             $table->text('products')->nullable()->comment('Продукты');
             $table->string('email')->unique();
             $table->timestamps();
-        });
-
-        Schema::table('media', function (Blueprint $table) {
-            $table->foreignId('logo_id')->constrained();
         });
     }
 

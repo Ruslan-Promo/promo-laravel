@@ -16,32 +16,19 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name')->comment('Название');
-            $table->float('price_year')->comment('Стоимость за год');
+            $table->float('price_year')->nullable()->comment('Стоимость за год');
             $table->text('description')->nullable()->comment('Описание');
-            $table->unsignedBigInteger('agent_id')->default(0)->comment('Агент');
+            $table->foreignId('agent_id')->nullable()->comment('Агент')->constrained('agents')->onDelete('cascade');
             $table->text('advantages')->nullable()->comment('Преимущества');
             $table->float('price_six_month')->nullable()->comment('Стоимость за 6 месяцев');
             $table->float('price_one_month')->nullable()->comment('Стоимость за 1 месяц');
             $table->float('discount')->nullable()->comment('Скидка');
-            $table->unsignedBigInteger('category_id')->default(0)->comment('Категория');
-            $table->unsignedBigInteger('status_id')->default(0)->comment('Справочник статусов');
+            $table->foreignId('category_id')->nullable()->comment('Категория')->constrained('categories')->onDelete('set null');
+            $table->foreignId('status_id')->nullable()->comment('Справочник статусов')->constrained('statuses_product')->onDelete('set null');
             $table->timestamp('expiration_date')->nullable()->comment('Дата окончания');
             $table->text('options')->nullable()->comment('Опции');
             $table->timestamps();
         });
-
-        Schema::table('agents', function (Blueprint $table) {
-            $table->foreignId('agent_id')->constrained();
-        });
-
-        Schema::table('categories', function (Blueprint $table) {
-            $table->foreignId('category_id')->constrained();
-        });
-
-        Schema::table('statuses_product', function (Blueprint $table) {
-            $table->foreignId('status_id')->constrained();
-        });
-
     }
 
     /**

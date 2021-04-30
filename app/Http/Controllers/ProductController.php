@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\Media;
+use App\Models\ProductMedia;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Traits\UploadTrait;
+
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 
 class ProductController extends Controller
 {
@@ -39,28 +42,27 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ProductStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'price_year' => 'required',
-        ]);
         if($request->has('images')) {
             $save_images = array();
             $images = $request->file('images');
             foreach($images as $image){
-                $filename = $image->getClientOriginalName();
-                $media = $this->uploadOne($image, 'image', 'public', $filename);
+                $media = $this->uploadOne($image);
                 $save_images[] = $media->id;
             }
-            $request = new Request($request->all());
-            $request->merge(['images' => json_encode($save_images)]);
         }
-        Product::create($request->all());
-
+        $product = Product::create($request->all());
+        foreach($save_images as $image_id){
+            $args = [
+                'media_id' => $image_id,
+                'product_id' => $product->id
+            ];
+            ProductMedia::create($args);
+        }
         return redirect()->route('products.index')
             ->with('success', 'Product created successfully.');
     }
@@ -72,16 +74,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        if($product->images){
-            $images = json_decode($product->images, true);
-            $array = array();
-            foreach($images as $image){
-                $media = Media::where('id' , '=' , $image)->first();
-                $array[] = $media;
-            }
-            $product->images = $array;
-        }
-        return view('products.show', compact('product'));
+        return view('products.show', ['product' => $product]);
     }
 
     /**
@@ -92,45 +85,36 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        if($product->images){
-            $images = json_decode($product->images, true);
-            $array = array();
-            foreach($images as $image){
-                $media = Media::where('id' , '=' , $image)->first();
-                $array[] = $media;
-            }
-            $product->images = $array;
-        }
-        return view('products.edit', compact('product'));
+        return view('products.edit', ['product' => $product]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ProductUpdateRequest  $request
      * @param  \App\Models\product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product)
     {
-        $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'price_year' => 'required',
 
-        ]);
         if($request->has('new_images')) {
             $save_images = array();
             $images = $request->file('new_images');
             foreach($images as $image){
-                $filename = $image->getClientOriginalName();
-                $media = $this->uploadOne($image, 'image', 'public', $filename);
+                $media = $this->uploadOne($image);
                 $save_images[] = $media->id;
             }
-            $request = new Request($request->all());
-            $request->merge(['images' => json_encode($save_images)]);
         }
+
         $product->update($request->all());
+        foreach($save_images as $image_id){
+            $args = [
+                'media_id' => $image_id,
+                'product_id' => $product->id
+            ];
+            ProductMedia::create($args);
+        }
 
         return redirect()->route('products.index')
             ->with('success', 'Product updated successfully');

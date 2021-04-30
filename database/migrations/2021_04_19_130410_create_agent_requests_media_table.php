@@ -15,17 +15,9 @@ class CreateAgentRequestsMediaTable extends Migration
     {
         Schema::create('agent_requests_media', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('media_id')->comment('Медиа');
-            $table->unsignedBigInteger('requests_id')->comment('Заявки агента');
+            $table->foreignId('media_id')->comment('Медиа')->constrained('media')->onDelete('cascade');
+            $table->foreignId('requests_id')->comment('Заявки агента')->constrained('agent_requests')->onDelete('cascade');
             $table->timestamps();
-        });
-
-        Schema::table('media', function (Blueprint $table) {
-            $table->foreignId('media_id')->constrained();
-        });
-
-        Schema::table('agent_requests', function (Blueprint $table) {
-            $table->foreignId('requests_id')->constrained();
         });
     }
 

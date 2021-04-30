@@ -14,20 +14,14 @@ class Agent extends Migration
     public function up()
     {
         Schema::create('agents', function (Blueprint $table) {
+
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('company_id')->default(0)->comment('Компания');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('company_id')->nullable()->comment('Компания')->constrained('companies');
             $table->string('specialty')->nullable()->comment('Должность');
-            $table->unsignedBigInteger('photo_id')->default(0)->comment('Фото');
+            $table->foreignId('photo_id')->nullable()->comment('Фото')->constrained('media')->onDelete('cascade');
+
             $table->timestamps();
-        });
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained();
-        });
-
-        Schema::table('media', function (Blueprint $table) {
-            $table->foreignId('photo_id')->constrained();
         });
     }
 

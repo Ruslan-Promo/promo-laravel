@@ -15,17 +15,9 @@ class CreateProductsMediaTable extends Migration
     {
         Schema::create('products_media', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('media_id')->comment('Медиа');
-            $table->unsignedBigInteger('product_id')->comment('Продукт');
+            $table->foreignId('media_id')->comment('Медиа')->constrained('media')->onDelete('cascade');
+            $table->foreignId('product_id')->comment('Продукт')->constrained('products')->onDelete('cascade');
             $table->timestamps();
-        });
-
-        Schema::table('media', function (Blueprint $table) {
-            $table->foreignId('media_id')->constrained();
-        });
-
-        Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('product_id')->constrained();
         });
     }
 

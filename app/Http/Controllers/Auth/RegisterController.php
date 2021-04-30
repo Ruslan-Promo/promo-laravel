@@ -83,6 +83,7 @@ class RegisterController extends Controller
             'status' => User::STATUS_INACTIVE,
         ]);
         Mail::to($user->email)->send(new VerifyMail($user));
+        $user->assignRole(User::ROLE_DEFAULT);
         return $user;
     }
 

@@ -5,6 +5,50 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Product
+ *
+ * @property int $id
+ * @property string $name
+ * @property float $price_year
+ * @property string|null $description
+ * @property int $agent_id
+ * @property string|null $advantages
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Media[] $images
+ * @property float|null $price_six_month
+ * @property float|null $price_one_month
+ * @property float|null $discount
+ * @property int $category_id
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\StatusesProduct[] $status
+ * @property string|null $expiration_date
+ * @property string|null $options
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Agent $agent
+ * @property-read \App\Models\Category $category
+ * @property-read int|null $images_count
+ * @property-read int|null $status_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Product newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereAdvantages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereAgentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereExpirationDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereImages($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereOptions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product wherePriceOneMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product wherePriceSixMonth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product wherePriceYear($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Product whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Product extends Model
 {
     use HasFactory;

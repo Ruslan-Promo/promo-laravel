@@ -5,6 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Agent
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $company_id
+ * @property string|null $specialty
+ * @property \App\Models\Media $photo
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Company $company
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent wherePhoto($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent whereSpecialty($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Agent whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Agent extends Model
 {
     use HasFactory;
@@ -24,7 +48,7 @@ class Agent extends Model
     /**
      * Default info
      *
-     * @var object
+     * @var void
      */
     public function user()
     {
@@ -34,7 +58,7 @@ class Agent extends Model
     /**
      * Agent Company
      *
-     * @var object
+     * @var void
      */
     public function company()
     {
@@ -44,10 +68,10 @@ class Agent extends Model
     /**
      * Agent photo
      *
-     * @var object
+     * @var void
      */
     public function photo()
     {
-        return $this->hasOne(Media::class, 'photo_id', 'id')->withDefault();
+        return $this->belongsTo(Media::class, 'photo_id', 'id')->withDefault();
     }
 }

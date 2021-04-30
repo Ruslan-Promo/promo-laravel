@@ -8,22 +8,12 @@ use App\Models\Media;
 
 trait UploadTrait
 {
-    public function uploadOne(UploadedFile $uploadedFile, $type = '', $disk = 'public', $filename = null)
+    public function uploadOne(UploadedFile $uploadedFile, $filename = null, $disk = 'public')
     {
-        $prefix_folder = 'uploads/';
-        $folder = 'others';
-        switch($type){
-            case 'image':
-                $folder = 'images';
-                break;
-            case 'file':
-                $folder = 'files';
-                break;
-            default:
-                $folder = 'others';
-                break;
-        }
-        $folder = $prefix_folder . $folder;
+        $prefix_folder = 'uploads';
+        $year = date('Y');
+        $month = date('m');
+        $folder = $prefix_folder .'/'. $year .'/'.$month;
         $name = !is_null($filename) ? $filename : time() . $uploadedFile->getClientOriginalExtension();
         $file = $uploadedFile->storeAs($folder, $name, $disk);
 
