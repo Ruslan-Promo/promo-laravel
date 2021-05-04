@@ -29,7 +29,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = '/profile';
 
     /**
      * Create a new controller instance.
@@ -46,6 +46,12 @@ class LoginController extends Controller
         if ($user->status !== User::STATUS_ACTIVE) {
             $this->guard()->logout();
             return back()->with('error', 'You need to confirm your account. Please check your email.');
+        }else{
+            if($user->hasRole(User::ROLE_ADMIN)){
+                return redirect()->route('admin');
+            }else{
+                return redirect()->route('profile.edit');
+            }
         }
         return redirect()->intended($this->redirectPath());
     }
