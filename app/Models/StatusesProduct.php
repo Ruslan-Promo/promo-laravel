@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class StatusesProduct extends Model
 {
+    protected $table = 'statuses_product';
+
     use HasFactory;
 
     /**

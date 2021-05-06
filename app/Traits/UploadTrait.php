@@ -1,29 +1,63 @@
 <?php
 namespace App\Traits;
-
-use Illuminate\Support\Str;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Http\File;
 use App\Models\Media;
+use Intervention\Image\Facades\Image;
+
 
 trait UploadTrait
 {
-    public function uploadOne(UploadedFile $uploadedFile, $filename = null, $disk = 'public')
+    public function uploadOne(UploadedFile $uploadedFile, $filename = null)
     {
-        $prefix_folder = 'uploads';
-        $year = date('Y');
-        $month = date('m');
-        $folder = $prefix_folder .'/'. $year .'/'.$month;
-        $name = !is_null($filename) ? $filename : time() . $uploadedFile->getClientOriginalExtension();
-        $file = $uploadedFile->storeAs($folder, $name, $disk);
+        $name = !is_null($filename) ? $filename : time();
+        $ext = $uploadedFile->getClientOriginalExtension();
 
+        $path = $this->imageSave($uploadedFile, $name, $ext);
+        if(!$path){
+            $path = $this->save($uploadedFile, $name, $ext);
+        }
         $args = array(
             'name' => $name,
-            'type' => $uploadedFile->getClientOriginalExtension(),
-            'path' => $file
+            'type' => $ext,
+            'path' => $path
         );
 
         $media = Media::create($args);
         return $media;
+    }
+
+    private function imageSave( $file, $name, $ext){
+        $max_width = 1500;
+        $max_height = 1500;
+        $path = false;
+        $imageExtensions = ['jpg', 'jpeg', 'png'];
+        if(in_array($ext, $imageExtensions)){
+            $image = Image::make($file);
+            $image->resize($max_width, $max_height, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            $image->save();
+            $saved_image_uri = $image->dirname.'/'.$image->basename;
+
+            $path = $this->save(new File($saved_image_uri), $name, $ext);
+
+            $image->destroy();
+            unlink($saved_image_uri);
+        }
+        return $path;
+    }
+
+    private function save( $file, $filename = null, $ext = null ){
+        $year = date('Y');
+        $month = date('m');
+        $folder = 'uploads/'. $year .'/'.$month;
+        $name = !is_null($filename) && $filename != '' ? $filename : time();
+        $ext = !is_null($ext) && $ext != '' ? $ext : $file->getClientOriginalExtension();
+        $save_name = $name .'.'. $ext;
+
+        return Storage::disk('public')->putFileAs($folder, $file, $save_name, 'public');
     }
 }

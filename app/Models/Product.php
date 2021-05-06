@@ -91,7 +91,7 @@ class Product extends Model
      */
     public function agent()
     {
-        return $this->belongsTo(Agent::class, 'agent_id', 'id');
+        return $this->belongsTo(Agent::class, 'agent_id', 'id')->withDefault();
     }
 
     /**
@@ -121,7 +121,7 @@ class Product extends Model
      */
     public function status()
     {
-        return $this->belongsToMany(StatusesProduct::class, 'status_id', 'id');
+        return $this->belongsTo(StatusesProduct::class, 'status_id', 'id');
     }
 
 }

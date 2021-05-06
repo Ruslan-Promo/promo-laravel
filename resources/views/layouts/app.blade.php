@@ -23,7 +23,11 @@
     <body class="{{ $class ?? '' }}">
         @auth()
             <div class="wrapper">
+                @if (auth()->user()->isAgent())
+                @include('layouts.navbars.sidebarAgent')
+                @elseif(auth()->user()->isAdmin())
                 @include('layouts.navbars.sidebar')
+                @endif
                 <div class="main-panel">
                     @include('layouts.navbars.navbar')
 

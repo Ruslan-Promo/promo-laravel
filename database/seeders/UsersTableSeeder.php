@@ -22,16 +22,14 @@ class UsersTableSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
+        Permission::create(['name' => 'create product']);
         Permission::create(['name' => 'edit product']);
         Permission::create(['name' => 'delete product']);
-        Permission::create(['name' => 'publish product']);
-        Permission::create(['name' => 'unpublish product']);
 
         $role_admin = Role::create(['name' => User::ROLE_ADMIN]);
 
         $role_agent = Role::create(['name' => User::ROLE_AGENT]);
-        $role_agent->givePermissionTo('publish product');
-        $role_agent->givePermissionTo('unpublish product');
+        $role_agent->givePermissionTo('create product');
         $role_agent->givePermissionTo('edit product');
         $role_agent->givePermissionTo('delete product');
 

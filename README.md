@@ -13,6 +13,11 @@ composer require laravel/sail --dev
 php artisan sail:install
 ```
 
+- Установить все зависимости через Composer
+```bash
+composer install
+```
+
 - Запустить проекта из папки 
 ```bash
 ./vendor/bin/sail up
@@ -26,6 +31,12 @@ php artisan sail:install
 192.168.0.62 host.docker.internal
 192.168.0.62 soglasie.test
 ```
+- Выполнить миграции командой
+```bash
+php artisan migrate:refresh --seed
+```
+При этом будет добавлен администратор через seed https://laravel.com/docs/8.x/seeding
+
 ## Процесс создания переменных окружения и установке зависимостей
 
 При запуске команды `./vendor/bin/sail up` генерируются переменные окружения (.env) и загружаются/подключаются зависимости из composer.json

@@ -12,6 +12,10 @@ use App\Traits\UploadTrait;
 
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Models\Category;
+use App\Models\StatusesProduct;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -26,7 +30,14 @@ class ProductController extends Controller
      */
     public function index(Product $model)
     {
-        return view('products.index', ['products' => $model->paginate(15)]);
+        $user = Auth::user();
+        if($user->isAgent()){
+            $params['products'] = $model->whereAgentId($user->agent->id)->paginate(15);
+            return view('products.agent.index', $params);
+        }
+
+        $params['products'] = $model->paginate(15);
+        return view('products.index', $params);
     }
 
     /**
@@ -36,7 +47,17 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('products.create');
+        $user = Auth::user();
+        if (!$user->can('create', Product::class)) {
+            return redirect()->route('products.index')
+            ->with('forbidden', 'Forbidden to create a product.');
+        }else{
+            if($user->isAgent()){
+                return view('products.agent.create', ['categories' => Category::all(), 'statuses' => StatusesProduct::all()]);
+            }
+            return view('products.create', ['categories' => Category::all(), 'statuses' => StatusesProduct::all()]);
+        }
+
     }
 
     /**
@@ -47,8 +68,13 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
+        $user = Auth::user();
+        if($user->isAgent()){
+            $agent_id = $user->agent->id;
+            $request->request->add(['agent_id' => $agent_id]);
+        }
         if($request->has('images')) {
-            $save_images = array();
+            $save_images = [];
             $images = $request->file('images');
             foreach($images as $image){
                 $media = $this->uploadOne($image);
@@ -74,7 +100,14 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $user = Auth::user();
+        if (!$user->can('view', $product)) {
+            return redirect()->route('products.index')
+            ->with('forbidden', 'Forbidden to view a product.');
+
+        }
         return view('products.show', ['product' => $product]);
+
     }
 
     /**
@@ -85,7 +118,14 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('products.edit', ['product' => $product]);
+        $user = Auth::user();
+        if (!$user->can('update', $product)) {
+            return redirect()->route('products.index')
+            ->with('forbidden', 'Forbidden to update a product.');
+        }else{
+            return view('products.edit', ['product' => $product]);
+        }
+
     }
 
     /**
@@ -97,7 +137,6 @@ class ProductController extends Controller
      */
     public function update(ProductUpdateRequest $request, Product $product)
     {
-
         if($request->has('new_images')) {
             $save_images = array();
             $images = $request->file('new_images');
@@ -123,14 +162,20 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param  integer  $product_id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy( $product_id )
     {
-        $product->delete();
-
-        return redirect()->route('products.index')
+        $product = Product::findOrFail($product_id);
+        $user = Auth::user();
+        if (!$user->can('delete', $product)) {
+            return redirect()->route('products.index')
+            ->with('forbidden', 'Forbidden to delete a product.');
+        }else{
+            $product->delete();
+            return redirect()->route('products.index')
             ->with('success', 'Product deleted successfully');
+        }
     }
 }

@@ -11,7 +11,7 @@
                         <h4 class="card-title">{{ __('admin.AddProduct') }}</h4>
                     </div>
                     <div class="col-4 text-right">
-                        <a href="{{ route('products.index') }}" class="btn btn-sm btn-primary">{{ __('main.Back') }}</a>
+                        <a href="{{ route('products.agent.index') }}" class="btn btn-sm btn-primary">{{ __('main.Back') }}</a>
                     </div>
                 </div>
             </div>

@@ -39,6 +39,7 @@ class Agent extends Model
      * @var array
      */
     protected $fillable = [
+        'id',
         'user_id',
         'company_id',
         'specialty',
