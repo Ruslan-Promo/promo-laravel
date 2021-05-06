@@ -39,8 +39,10 @@ class UsersTableSeeder extends Seeder
 
         $admin = User::factory()->create([
             'id' => 1,
+            'surname' => 'Admin',
             'name' => 'Admin',
             'role' => User::ROLE_ADMIN,
+            'status' => User::STATUS_ACTIVE,
             'email' => 'admin@admin.ru',
             'password' => Hash::make('admin123'),
         ]);
@@ -48,21 +50,25 @@ class UsersTableSeeder extends Seeder
 
         $agent = User::factory()->create([
             'id' => 2,
+            'surname' => 'Agent',
             'name' => 'Agent',
             'role' => User::ROLE_AGENT,
+            'status' => User::STATUS_ACTIVE,
             'email' => 'agent@agent.ru',
             'password' => Hash::make('agent123'),
         ]);
 
-        Agent::factory()->create([
+        Agent::create([
             'user_id' => $agent->id,
         ]);
         $agent->assignRole($role_agent);
 
         $user = User::factory()->create([
             'id' => 3,
+            'surname' => 'User',
             'name' => 'User',
             'role' => User::ROLE_DEFAULT,
+            'status' => User::STATUS_ACTIVE,
             'email' => 'user@user.ru',
             'password' => Hash::make('user123'),
         ]);
