@@ -14,7 +14,7 @@ class ProductStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->hasRole(User::ROLE_ADMIN) || $this->user()->can('edit product');
+        return $this->user()->isAdmin() || $this->user()->can('create', Product::class);
     }
 
     /**
@@ -28,6 +28,7 @@ class ProductStoreRequest extends FormRequest
             'name' => ['required', 'max:255'],
             'description' => ['required'],
             'price_year' => ['required', 'numeric'],
+            'images.*' => ['mimes:jpeg,png,jpg,svg', 'dimensions:min_width=300,min_height=300'],
         ];
     }
 }

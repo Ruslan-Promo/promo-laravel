@@ -65,6 +65,14 @@ services:
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
+    meilisearch:
+        image: 'getmeili/meilisearch:latest'
+        ports:
+            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+        volumes:
+            - 'sailmeilisearch:/data.ms'
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
@@ -72,4 +80,6 @@ volumes:
     sailmysql:
         driver: local
     sailredis:
+        driver: local
+    sailmeilisearch:
         driver: local

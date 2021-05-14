@@ -14,7 +14,7 @@ class ProductUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->hasRole(User::ROLE_ADMIN) || $this->user()->can('edit product');
+        return $this->user()->isAdmin() || $this->user()->can('update', Product::class);
     }
 
     /**

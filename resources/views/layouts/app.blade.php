@@ -23,7 +23,11 @@
     <body class="{{ $class ?? '' }}">
         @auth()
             <div class="wrapper">
+                @if (auth()->user()->isAgent())
+                @include('layouts.navbars.sidebarAgent')
+                @elseif(auth()->user()->isAdmin())
                 @include('layouts.navbars.sidebar')
+                @endif
                 <div class="main-panel">
                     @include('layouts.navbars.navbar')
 
@@ -64,7 +68,7 @@
 
         <script src="{{ asset('black') }}/js/black-dashboard.min.js?v=1.0.0"></script>
         <script src="{{ asset('black') }}/js/theme.js"></script>
-
+        <script src="/js/products.js"></script>
         @stack('js')
 
         <script>

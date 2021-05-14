@@ -47,10 +47,10 @@ class LoginController extends Controller
             $this->guard()->logout();
             return back()->with('error', 'You need to confirm your account. Please check your email.');
         }else{
-            if($user->hasRole(User::ROLE_ADMIN)){
+            if($user->isAdmin()){
                 return redirect()->route('admin');
-            }else{
-                return redirect()->route('profile.edit');
+            }elseif($user->isAgent()){
+                return redirect()->route('agent');
             }
         }
         return redirect()->intended($this->redirectPath());

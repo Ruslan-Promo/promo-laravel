@@ -62,7 +62,9 @@ class Agent extends Model
      */
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id')->withDefault();
+        return $this->belongsTo(Company::class, 'company_id', 'id')->withDefault([
+            'name' => '',
+        ]);
     }
 
     /**

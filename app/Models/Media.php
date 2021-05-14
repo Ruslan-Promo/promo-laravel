@@ -50,4 +50,13 @@ class Media extends Model
         'type',
         'path',
     ];
+
+    /**
+     * Get storage path.
+     *
+     * @return string
+     */
+    public function getStoragePath(){
+        return 'storage/'.$this->path;
+    }
 }

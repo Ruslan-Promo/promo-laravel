@@ -13,6 +13,11 @@ composer require laravel/sail --dev
 php artisan sail:install
 ```
 
+- Установить все зависимости через Composer
+```bash
+composer install
+```
+
 - Запустить проекта из папки 
 ```bash
 ./vendor/bin/sail up

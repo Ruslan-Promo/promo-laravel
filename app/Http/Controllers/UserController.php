@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Auth;
+
 class UserController extends Controller
 {
     /**
@@ -16,6 +18,11 @@ class UserController extends Controller
      */
     public function index(User $model)
     {
-        return view('users.index', ['users' => $model->paginate(15)]);
+        if(Auth::user()->isAdmin()){
+            return view('users.index', ['users' => $model->paginate(15)]);
+        }else{
+            abort(403, 'Only admin!');
+        }
+
     }
 }
