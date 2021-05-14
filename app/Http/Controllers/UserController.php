@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index(User $model)
     {
-        if(Auth::user()->hasRole(User::ROLE_ADMIN)){
+        if(Auth::user()->isAdmin()){
             return view('users.index', ['users' => $model->paginate(15)]);
         }else{
             abort(403, 'Only admin!');

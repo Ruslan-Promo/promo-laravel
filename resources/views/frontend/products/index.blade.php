@@ -11,7 +11,5 @@
             </div>
         @endforeach
     </div>
-    @else
-    <div class="">{{ __('Products Not Found') }}</div>
     @endif
 @endsection

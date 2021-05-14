@@ -32,7 +32,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         if($user->isAgent()){
-            $params['products'] = $model->whereAgentId($user->agent->id)->paginate(15);
+            $params['products'] = $model->ByAgent($user->agent->id)->paginate(15);
             return view('products.agent.index', $params);
         }
 

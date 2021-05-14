@@ -39,7 +39,6 @@ class Agent extends Model
      * @var array
      */
     protected $fillable = [
-        'id',
         'user_id',
         'company_id',
         'specialty',
@@ -63,7 +62,9 @@ class Agent extends Model
      */
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id')->withDefault();
+        return $this->belongsTo(Company::class, 'company_id', 'id')->withDefault([
+            'name' => '',
+        ]);
     }
 
     /**

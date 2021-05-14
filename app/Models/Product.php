@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -51,7 +52,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     /**
      * The attributes to be converted to base types.
@@ -124,4 +125,45 @@ class Product extends Model
         return $this->belongsTo(StatusesProduct::class, 'status_id', 'id');
     }
 
+    /**
+     * Scope a query to only include products by category.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  integer  $categoryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByCategory($query, $categoryId)
+    {
+        return $query->where('category_id', $categoryId);
+    }
+
+    /**
+     * Scope a query to only include products by agent.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  integer  $agentId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByAgent($query, $agentId)
+    {
+        return $query->where('agent_id', $agentId);
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        return [
+            'id' => $array['id'],
+            'name' => $array['name'],
+            'price_year' => $array['price_year'],
+            'category' => $this->category->name,
+            'company' => $this->agent->company->name,
+        ];
+    }
 }

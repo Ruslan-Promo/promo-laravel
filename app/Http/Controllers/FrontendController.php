@@ -22,16 +22,15 @@ class FrontendController extends Controller
 
     }
 
-    public function productsCategory($category_slug)
+    public function productsCategory(Category $category)
     {
-        $category = Category::where('slug', '=', $category_slug)->firstOrFail();
-        $params['products'] = Product::where('category_id', '=', $category->id)->paginate(15);
+        $params['products'] = Product::ByCategory($category->id)->paginate(15);
         return view('frontend.products.category', $params);
     }
 
-    public function productsShow($category_slug, $product_id)
+    public function productsShow(Category $category, Product $product)
     {
-        $product = Product::findOrFail($product_id);
         return view('frontend.products.show', ['product' => $product]);
     }
+
 }

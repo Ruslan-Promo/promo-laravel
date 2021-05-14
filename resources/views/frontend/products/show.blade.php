@@ -42,7 +42,7 @@
                                 @if ($product->images)
                                 @foreach ($product->images as $image )
                                 <div class="col-2">
-                                    <img src="{{ asset('storage/'.$image->path) }}" alt="" title="">
+                                    <img src="{{ asset($image->getStoragePath()) }}" alt="" title="">
                                 </div>
                                 @endforeach
 

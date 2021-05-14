@@ -68,7 +68,7 @@
 
         <script src="{{ asset('black') }}/js/black-dashboard.min.js?v=1.0.0"></script>
         <script src="{{ asset('black') }}/js/theme.js"></script>
-
+        <script src="/js/products.js"></script>
         @stack('js')
 
         <script>
