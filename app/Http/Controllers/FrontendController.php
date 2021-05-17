@@ -50,7 +50,7 @@ class FrontendController extends Controller
                         $price = $product->price_six_month;
                         $type = __('main.PriceSixMonth');
                         break;
-                    case 'six_month':
+                    case 'year':
                         $price = $product->price_year;
                         $type = __('main.PriceYear');
                         break;
