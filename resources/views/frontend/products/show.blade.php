@@ -49,6 +49,52 @@
                                 @endif
                             </div>
                         </div>
+                        @if(Auth::check())
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <form action="{{ route('frontend.products.purchase') }}" method="POST" enctype="multipart/form-data" style="width:100%">
+                                @csrf
+                                <input type="hidden" name="productId" value="{{ $product->id }}">
+                                <input type="hidden" name="paymentId" value="">
+                                <input id="card-holder-name" type="text">
+                                <div id="card-element"></div>
+                                <select name="type">
+                                    <option value="year">Годовая</option>
+                                    <option value="one_month">1 месяц</option>
+                                    <option value="price_six_month">6 месяцев</option>
+                                </select>
+                                <button id="card-button">Payment</button>
+                            </form>
+                            <script>
+                                const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+
+                                const elements = stripe.elements();
+                                const cardElement = elements.create('card');
+
+                                cardElement.mount('#card-element');
+
+                                const cardHolderName = document.getElementById('card-holder-name');
+                                const cardButton = document.getElementById('card-button');
+
+                                cardButton.addEventListener('click', async (e) => {
+                                    e.preventDefault();
+                                    const { paymentMethod, error } = await stripe.createPaymentMethod(
+                                        'card', cardElement, {
+                                            billing_details: { name: cardHolderName.value }
+                                        }
+                                    );
+
+                                    if (error) {
+                                        console.log(error);
+                                    } else {
+                                        console.log(paymentMethod);
+                                        cardButton.parentElement.querySelector('input[name="paymentId"]').value = paymentMethod.id;
+                                        cardButton.parentElement.submit();
+                                        // The card has been verified successfully...
+                                    }
+                                });
+                            </script>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

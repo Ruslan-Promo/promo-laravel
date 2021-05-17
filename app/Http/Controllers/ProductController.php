@@ -23,20 +23,19 @@ class ProductController extends Controller
     use UploadTrait;
 
     /**
-     * Display a listing of the users
+     * Display a listing of the products
      *
-     * @param  \App\Models\Product $model
      * @return \Illuminate\View\View
      */
-    public function index(Product $model)
+    public function index()
     {
         $user = Auth::user();
         if($user->isAgent()){
-            $params['products'] = $model->ByAgent($user->agent->id)->paginate(15);
+            $params['products'] = Product::ByAgent($user->agent->id)->paginate(15);
             return view('products.agent.index', $params);
         }
 
-        $params['products'] = $model->paginate(15);
+        $params['products'] = Product::paginate(15);
         return view('products.index', $params);
     }
 
