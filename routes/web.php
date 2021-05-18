@@ -64,6 +64,10 @@ Route::group(['middleware' => ['setlocale']], function () {
     Route::get('search', ['as' => 'frontend.products.search', 'uses' => 'App\Http\Controllers\SearchController@search']);
 });
 
+Route::group(['middleware' => ['auth', 'setlocale']], function () {
+    Route::post('products/purchase', ['as' => 'frontend.products.purchase', 'uses' => 'App\Http\Controllers\FrontendController@productsPurchase']);
+});
+
 /* Localization */
 Route::get('setlocale/{locale}',function($locale){
     if (! in_array($locale, ['en', 'ru'])) {
