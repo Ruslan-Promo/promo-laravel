@@ -21,7 +21,8 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "meilisearch/meilisearch-php": "^0.18.0",
-        "spatie/laravel-permission": "^4.0"
+        "spatie/laravel-permission": "^4.0",
+        "tecnickcom/tcpdf": "^6.4"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",

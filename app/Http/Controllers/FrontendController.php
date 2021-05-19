@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\PromoPdfServiceInterface;
+use App\Events\ProductPaid;
+use App\Jobs\PolicyGenerateJob;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\ProductRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,6 +43,13 @@ class FrontendController extends Controller
     {
         if($request->has('productId') && Auth::check()){
             $product = Product::findOrFail($request->get('productId'));
+
+            $product_request = ProductRequest::create([
+                'product_id' => $product->id,
+                'user_id' => Auth::user()->id,
+                'date_created' => date('Y-m-d')
+            ]);
+
             $price = $product->price_year;
             $type = __('main.PriceYear');
             if($request->has('type')){
@@ -56,13 +68,24 @@ class FrontendController extends Controller
                         break;
                 }
             }
-            $price = $price * 100;
-            $payment = Auth::user()->charge($price, $request->get('paymentId'), [
-                'amount' => $price,
+            $price_convert = $price * 100;
+            $payment = Auth::user()->charge($price_convert, $request->get('paymentId'), [
+                'amount' => $price_convert,
                 'currency' => 'usd',
                 'receipt_email' => $request->user()->email,
                 'description' => $product->name.' ('.$type.')',
             ]);
+
+            $order = Order::create([
+                'customer_id' => $product_request->user_id,
+                'agent_id' => $product->agent_id,
+                'request_id' => $product_request->id,
+                'total' => $price,
+                'date_registration' => date('Y-m-d'),
+                'date_payment' => date('Y-m-d')
+            ]);
+            event(new ProductPaid($order));
+            PolicyGenerateJob::dispatch($order);
             return view('frontend.products.show', ['product' => $product, 'status' => 'success']);
         }
 
