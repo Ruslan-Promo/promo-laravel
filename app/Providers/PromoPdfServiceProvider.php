@@ -15,7 +15,7 @@ class PromoPdfServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(PromoPdfServiceInterface::class, function ($app) {
+        $this->app->singleton(PromoPdfServiceInterface::class, function ($app) {
             return new PromoPdfService();
           });
     }
