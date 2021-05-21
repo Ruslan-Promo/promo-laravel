@@ -4,10 +4,12 @@ namespace App\Console\Commands;
 
 use App\Contracts\PromoPdfServiceInterface;
 use App\Models\Order;
+use App\Traits\UploadTrait;
 use Illuminate\Console\Command;
 
 class PolicyGenerate extends Command
 {
+    use UploadTrait;
     /**
      * The name and signature of the console command.
      *
@@ -40,6 +42,10 @@ class PolicyGenerate extends Command
     public function handle(PromoPdfServiceInterface $pdf)
     {
         $order = Order::find($this->argument('orderId'));
-        echo 'Success: '.$pdf->generate($order).PHP_EOL;
+        $path = $pdf->generate($order);
+        $policy = $this->moveFile($path);
+        unlink($path);
+        $path = $policy->getStoragePath();
+        echo asset($path).PHP_EOL;
     }
 }

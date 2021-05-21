@@ -16,7 +16,7 @@ class PromoPdfService implements PromoPdfServiceInterface
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Страховая компания "Согласие"');
+        $pdf->SetAuthor(env('APP_SITENAME'));
         $title = __('Страховой полис №').$order->id;
         $pdf->SetTitle($title);
         $pdf->SetSubject($title);
