@@ -28,6 +28,24 @@ trait UploadTrait
         return $media;
     }
 
+    public function moveFile($path){
+        $file = new File($path);
+
+        $name = time();
+        $ext = $file->guessExtension();
+
+        $path = $this->save($file, $name, $ext);
+
+        $args = array(
+            'name' => $name,
+            'type' => $ext,
+            'path' => $path
+        );
+
+        $media = Media::create($args);
+        return $media;
+    }
+
     private function imageSave( $file, $name, $ext){
         $max_width = 1500;
         $max_height = 1500;

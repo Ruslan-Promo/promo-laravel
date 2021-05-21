@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Contracts\PromoPdfServiceInterface;
 use App\Models\Order;
+use App\Traits\UploadTrait;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +14,7 @@ use Illuminate\Queue\SerializesModels;
 
 class PolicyGenerateJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, UploadTrait;
 
     protected $order;
     /**
@@ -31,8 +32,12 @@ class PolicyGenerateJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle(PromoPdfServiceInterface $pdf)
+    public function handle(PromoPdfServiceInterface $pdfService)
     {
-        return $pdf->generate($this->order);
+        $path = $pdfService->generate($this->order);
+        $policy = $this->moveFile($path);
+        unlink($path);
+        $path = $policy->getStoragePath();
+        return asset($path);
     }
 }

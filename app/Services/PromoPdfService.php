@@ -4,7 +4,6 @@ namespace App\Services;
 use App\Contracts\PromoPdfServiceInterface;
 use App\Models\Order;
 use Illuminate\Support\Facades\Storage;
-//require_once base_path('vendor/tecnickcom/tcpdf/tcpdf.php');
 
 use TCPDF;
 
@@ -16,7 +15,7 @@ class PromoPdfService implements PromoPdfServiceInterface
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Страховая компания "Согласие"');
+        $pdf->SetAuthor(env('APP_SITENAME'));
         $title = __('Страховой полис №').$order->id;
         $pdf->SetTitle($title);
         $pdf->SetSubject($title);

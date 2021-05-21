@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ProductPaidMailer extends Mailable
+class PolicyEndMailer extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -31,7 +31,7 @@ class ProductPaidMailer extends Mailable
     public function build()
     {
         return $this->from(env('APP_EMAIL'), env('APP_SITENAME'))
-            ->subject('Благодарим за покупку полиса')
-            ->markdown('emails.paid');
+            ->subject('Истекает срок действия полиса')
+            ->markdown('emails.policyEnd');
     }
 }
