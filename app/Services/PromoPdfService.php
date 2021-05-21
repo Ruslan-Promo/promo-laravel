@@ -4,7 +4,6 @@ namespace App\Services;
 use App\Contracts\PromoPdfServiceInterface;
 use App\Models\Order;
 use Illuminate\Support\Facades\Storage;
-//require_once base_path('vendor/tecnickcom/tcpdf/tcpdf.php');
 
 use TCPDF;
 

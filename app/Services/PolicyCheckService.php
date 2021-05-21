@@ -2,13 +2,12 @@
 namespace App\Services;
 
 use App\Contracts\PolicyCheckServiceInterface;
-use App\Mail\PolicyEndMailer;
+use App\Events\PolicyExpires;
 use App\Models\Order;
-use Illuminate\Support\Facades\Mail;
 
 class PolicyCheckService implements PolicyCheckServiceInterface
 {
-    public function check(Order $order)
+    public function checkExpirationDate(Order $order)
     {
         $array_date = [
             date_create("+1 week"),
@@ -19,15 +18,9 @@ class PolicyCheckService implements PolicyCheckServiceInterface
         $order_date = date_create($order->date_end);
 
         if(in_array($order_date, $array_date)){
-            $this->send($order);
+            event(new PolicyExpires($order));
             return true;
         }
         return false;
-    }
-
-    private function send(Order $order){
-        $customer_email = $order->customer->email;
-        Mail::to($customer_email)->send(new PolicyEndMailer($order));
-        echo 'aaa';
     }
 }

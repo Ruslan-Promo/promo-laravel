@@ -37,34 +37,35 @@ class CheckPoliciesExpirationDate extends Command
      *
      * @return int
      */
-    public function handle(PolicyCheckServiceInterface $police)
+    public function handle(PolicyCheckServiceInterface $policyCheckService)
     {
-
         $args = $this->arguments();
-        if(isset($args['id'])){
-            $order = Order::find($args['id']);
-            $flag = $police->check($order);
-            echo 'Order: '.$order->id.' checked;'.PHP_EOL;
-        }else{
-            echo 'All orders start check...'.PHP_EOL;
-            $date = date('Y-m-d', strtotime('+1 week'));
-            $orders = Order::where('date_end', '<=', $date)->get();
-            if($orders){
-                echo 'Orders go'.PHP_EOL;
-                foreach($orders as $order){
-                    if($police->check($order)){
-                        echo 'Order: '.$order->id.' send mail;'.PHP_EOL;
-                    }else{
-                        echo 'Order: '.$order->id.' not send;'.PHP_EOL;
-                    }
-                }
-            }else{
-                echo 'No orders'.PHP_EOL;
-            }
-            echo 'End check.'.PHP_EOL;
+        $orderId = $args['id'] ?? null;
+        if(null !== $orderId){
+            $this->policyCheckExpirationDate($policyCheckService, $orderId);
+            return 0;
         }
 
-        //$policies = Order::whereDateEnd()
+        $this->policiesCheckExpirationDate($policyCheckService);
         return 0;
+    }
+
+    private function policyCheckExpirationDate(PolicyCheckServiceInterface $policyCheckService, $orderId)
+    {
+        $order = Order::find($orderId);
+        $policyCheckService->checkExpirationDate($order);
+        echo 'Order: '.$order->id.' checked;'.PHP_EOL;
+    }
+
+    private function policiesCheckExpirationDate(PolicyCheckServiceInterface $policyCheckService){
+        echo 'All orders start check...'.PHP_EOL;
+        $date = date('Y-m-d', strtotime('+1 week'));
+        $orders = Order::where('date_end', '<=', $date)->get();
+        if($orders){
+            foreach($orders as $order){
+                $this->checkExpirationDate($policyCheckService, $order->id);
+            }
+        }
+        echo 'End'.PHP_EOL;
     }
 }

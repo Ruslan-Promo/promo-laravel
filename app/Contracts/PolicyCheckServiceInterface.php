@@ -6,5 +6,5 @@ use App\Models\Order;
 
 Interface PolicyCheckServiceInterface
 {
-    public function check(Order $order);
+    public function checkExpirationDate(Order $order);
 }

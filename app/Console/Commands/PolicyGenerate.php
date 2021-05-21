@@ -39,10 +39,10 @@ class PolicyGenerate extends Command
      *
      * @return int
      */
-    public function handle(PromoPdfServiceInterface $pdf)
+    public function handle(PromoPdfServiceInterface $pdfService)
     {
         $order = Order::find($this->argument('orderId'));
-        $path = $pdf->generate($order);
+        $path = $pdfService->generate($order);
         $policy = $this->moveFile($path);
         unlink($path);
         $path = $policy->getStoragePath();

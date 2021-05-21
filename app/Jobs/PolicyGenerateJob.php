@@ -32,9 +32,9 @@ class PolicyGenerateJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle(PromoPdfServiceInterface $pdf)
+    public function handle(PromoPdfServiceInterface $pdfService)
     {
-        $path = $pdf->generate($this->order);
+        $path = $pdfService->generate($this->order);
         $policy = $this->moveFile($path);
         unlink($path);
         $path = $policy->getStoragePath();
