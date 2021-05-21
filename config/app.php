@@ -180,6 +180,8 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
 
+        App\Providers\PromoPdfServiceProvider::class,
+
     ],
 
     /*
