@@ -10,10 +10,10 @@ class PolicyCheckService implements PolicyCheckServiceInterface
     public function checkExpirationDate(Order $order)
     {
         $array_date = [
-            date_create("+1 week"),
-            date_create("+2 days"),
-            date_create("+1 day"),
-            date_create("now")
+            date_create(date('Y-m-d', strtotime("+ 1 week"))),
+            date_create(date('Y-m-d', strtotime("+2 days"))),
+            date_create(date('Y-m-d', strtotime("+1 day"))),
+            date_create(date('Y-m-d', strtotime("now")))
         ];
         $order_date = date_create($order->date_end);
 
