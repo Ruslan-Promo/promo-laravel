@@ -8,18 +8,11 @@ use Tests\TestCase;
 
 class PolicyCheckExpirationDateTest extends TestCase
 {
-
-    private $order1, $order2, $order3, $order4;
     private $PolicyCheckService;
 
     public function setUp() : void
     {
         parent::setUp();
-
-        $this->order1 = Order::findOrFail(1);
-        $this->order2 = Order::findOrFail(2);
-        $this->order3 = Order::findOrFail(3);
-        $this->order4 = Order::findOrFail(4);
         $this->PolicyCheckService = new PolicyCheckService();
     }
 
@@ -28,27 +21,47 @@ class PolicyCheckExpirationDateTest extends TestCase
      *
      * @return void
      */
-    public function testPolicy1CheckExpirationDate()
+    public function testEndPolicyWeek()
     {
-        $result = $this->PolicyCheckService->checkExpirationDate($this->order1);
+        $order = Order::findOrFail(1);
+        $result = $this->PolicyCheckService->checkExpirationDate($order);
         $this->assertFalse($result);
     }
 
-    public function testPolicy2CheckExpirationDate()
+    /**
+     * A basic unit test example.
+     *
+     * @return void
+     */
+    public function testEndPolicyTwoDays()
     {
-        $result = $this->PolicyCheckService->checkExpirationDate($this->order2);
+        $order = Order::findOrFail(2);
+        $result = $this->PolicyCheckService->checkExpirationDate($order);
         $this->assertFalse($result);
     }
 
-    public function testPolicy3CheckExpirationDate()
+    /**
+     * A basic unit test example.
+     *
+     * @return void
+     */
+    public function testEndPolicyOneDay()
     {
-        $result = $this->PolicyCheckService->checkExpirationDate($this->order3);
+        $order = Order::findOrFail(3);
+        $result = $this->PolicyCheckService->checkExpirationDate($order);
         $this->assertFalse($result);
     }
 
-    public function testPolicy4CheckExpirationDate()
+    /**
+     * A basic unit test example.
+     *
+     * @return void
+     */
+    public function testEndPolicyToday()
     {
-        $result = $this->PolicyCheckService->checkExpirationDate($this->order4);
-        $this->assertFalse($result);
+        $order = Order::findOrFail(4);
+        $order->date_end = date('Y-m-d');
+        $result = $this->PolicyCheckService->checkExpirationDate($order);
+        $this->assertTrue($result);
     }
 }
