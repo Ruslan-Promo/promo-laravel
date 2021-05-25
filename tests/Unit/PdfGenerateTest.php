@@ -29,5 +29,6 @@ class PdfGenerateTest extends TestCase
         $path = $this->PromoPdfService->generate($this->order);
         $checkPath = storage_path().'/policy_1.pdf';
         $this->assertEquals($checkPath, $path);
+        unlink($path);
     }
 }
