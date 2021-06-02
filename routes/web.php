@@ -67,6 +67,7 @@ Route::group(['middleware' => ['setlocale']], function () {
 
 Route::group(['middleware' => ['auth', 'setlocale']], function () {
     Route::post('products/purchase', ['as' => 'frontend.products.purchase', 'uses' => 'App\Http\Controllers\FrontendController@productsPurchase']);
+    Route::post('products/contactme', ['as' => 'frontend.products.contactme', 'uses' => 'App\Http\Controllers\FrontendController@productsContactMe']);
 });
 
 /* Localization */

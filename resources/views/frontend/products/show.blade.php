@@ -94,6 +94,13 @@
                                 });
                             </script>
                         </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <form action="{{ route('frontend.products.contactme') }}" method="POST" enctype="multipart/form-data" style="width:100%">
+                                @csrf
+                                <input type="hidden" name="productId" value="{{ $product->id }}">
+                                <button type="submit">Contact Me</button>
+                            </form>
+                        </div>
                         @endif
                     </div>
                 </div>
