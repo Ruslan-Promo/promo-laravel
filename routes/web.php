@@ -62,6 +62,7 @@ Route::group(['middleware' => ['setlocale']], function () {
     Route::get('products/{category:slug}', ['as' => 'frontend.products.category', 'uses' => 'App\Http\Controllers\FrontendController@productsCategory']);
     Route::get('products/{category:slug}/{product}', ['as' => 'frontend.products.show', 'uses' => 'App\Http\Controllers\FrontendController@productsShow']);
     Route::get('search', ['as' => 'frontend.products.search', 'uses' => 'App\Http\Controllers\SearchController@search']);
+    Route::resource('news', 'App\Http\Controllers\NewsController');
 });
 
 Route::group(['middleware' => ['auth', 'setlocale']], function () {
