@@ -43,9 +43,8 @@ class PolicyGenerate extends Command
     {
         $order = Order::find($this->argument('orderId'));
         $path = $pdfService->generate($order);
-        $policy = $this->moveFile($path);
+        $policyPath = $this->cloudSave($path, 'policies');
         unlink($path);
-        $path = $policy->getStoragePath();
-        echo asset($path).PHP_EOL;
+        echo $policyPath;
     }
 }
