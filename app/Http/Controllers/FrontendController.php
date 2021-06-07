@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Contracts\PromoPdfServiceInterface;
 use App\Events\ProductPaid;
 use App\Jobs\PolicyGenerateJob;
+use App\Jobs\SendAgentMailJob;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\ProductRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -89,5 +91,15 @@ class FrontendController extends Controller
             return view('frontend.products.show', ['product' => $product, 'status' => 'success']);
         }
 
+    }
+
+    public function productsContactMe(Request $request)
+    {
+        if($request->has('productId')){
+            $product = Product::findOrFail($request->get('productId'));
+            $user = Auth::user();
+            SendAgentMailJob::dispatch($user, $product)->onConnection('rabbitmq')->onQueue('emails');
+        }
+        return back();
     }
 }
